@@ -13,7 +13,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     license='Apache-2.0',
     url="https://github.com/miraclx/node-io",
-    packages=['node-io'],
+    packages=['node_io'],
     install_requires=['node-events'],
     classifiers=[
         "Operating System :: OS Independent",
