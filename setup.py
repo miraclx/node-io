@@ -14,7 +14,7 @@ setuptools.setup(
     license='Apache-2.0',
     url="https://github.com/miraclx/node-io",
     packages=['node_io'],
-    install_requires=['node-events'],
+    install_requires=['node-events', 'node-buffer'],
     classifiers=[
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
