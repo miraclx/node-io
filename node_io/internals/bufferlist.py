@@ -4,15 +4,18 @@ from node_buffer import Buffer
 
 class Entry:
     def __init__(self, data=None, next=None):
-        self.data = data
-        self.next = next
+        [self.data, self.next] = [data, next]
 
-    def __repr__(self): return \
-        ('\x1b[32mEntry\x1b[0m {ob}{nl}\x1b[36mdata\x1b[0m: %a,{nl}\x1b[36mnext\x1b[0m:%s %s {cb}'
+    def __xrepr__(self): return \
+        (':green:Entry:off: {ob}{nl}:cyan:data:off:: %a,{nl}:cyan:next:off::%s %s {cb}'
          .format(nl='\n  ' if self.next else ' ', ob='{', cb='}') % (
-             self.data, '\n   ' if self.next else '', ('%s' % self.next).replace('\n', '\n    ' if self.next else '\n  ')))
+             self.data, '\n   ' if self.next else '', ('%a' % self.next).replace('\n', '\n    ' if self.next else '\n  ')))
 
-    def __str__(self): return self.__repr__()
+    def __repr__(self): return self.__xrepr__()\
+        .replace(':green:', '\x1b[32m').replace(':cyan:', '\x1b[36m').replace(':off:', '\x1b[0m')
+
+    def __str__(self): return self.__xrepr__()\
+        .replace(':green:', '').replace(':cyan:', '').replace(':off:', '')
 
 
 class BufferList:
@@ -22,7 +25,16 @@ class BufferList:
 
     def __repr__(self):
         return 'BufferList {ob}{nl}head: {0},{nl}tail: {1},{nl}length: \x1b[33m{2}\x1b[0m {cb}'\
-            .format(*(['\x1b[34m[object]\x1b[0m']*2 if self.head.next or self.tail.next else (self.head, self.tail)), self.length, ob='{', cb='}', nl=' ' if self.head.next else '\n  ')
+            .format(
+                *(
+                    ['\x1b[34m[object]\x1b[0m']*2
+                    if self.head.next or self.tail.next else
+                    (self.head.__repr__(), self.tail.__repr__())
+                ),
+                self.length,
+                ob='{', cb='}',
+                nl=' ' if self.head.next else '\n  '
+            )
 
     def push(self, v):
         entry = Entry(data=Buffer.new(v))
