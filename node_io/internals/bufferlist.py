@@ -1,4 +1,3 @@
-from rshift import rshift
 from node_buffer import Buffer
 
 
@@ -69,15 +68,15 @@ class BufferList:
 
     def join(self, s):
         if (self.length == 0):
-            return ''
-        p = self.head
-        ret = p.data.decode()
-        # while (p=p.next):
+            return Buffer.alloc(0)
+        [p, s, ret] = [self.head, Buffer.new(s), self.head.data]
         while (p.next):
+            p = p.next
             ret += s + p.data
         return ret
 
     def concat(self, n):
+        from internals.rshift import rshift
         if (self.length == 0):
             return Buffer()
         ret = Buffer.alloc(rshift(n, 0))
@@ -91,13 +90,14 @@ class BufferList:
 
     def consume(self, n, hasStrings=False):
         ret = None
-        if (n < len(self.head.data)):
-            ret = self.head.data.slice(0, n)
-            self.head.data = self.head.data.slice(n)
-        elif (n == len(self.head.data)):
-            ret = self.shift()
-        else:
-            ret = self._getBuffer(n)
+        if self.head.data:
+            if (n < len(self.head.data)):
+                ret = self.head.data.slice(0, n)
+                self.head.data = self.head.data.slice(n)
+            elif (n == len(self.head.data)):
+                ret = self.shift()
+            else:
+                ret = self._getBuffer(n)
         return ret
 
     def first(self):
