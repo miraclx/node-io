@@ -51,8 +51,8 @@ class EventLoop(EventEmitter):
     def nextTick(self, coro, *args):
         self._queue.put_nowait([coro, args])
         if self.__autostart and not self.started:
-            self.__autostarted = True
             self.start()
+            self.__autostarted = True
 
     @debugwrapper
     def start(self):
