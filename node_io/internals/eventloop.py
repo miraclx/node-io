@@ -76,6 +76,10 @@ class EventLoop(EventEmitter):
         self._thread.start()
 
     @debugwrapper
+    def join(self):
+        self._thread.join()
+
+    @debugwrapper
     def stop(self):
         self._queue.forceStop()
 
