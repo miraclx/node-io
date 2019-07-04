@@ -100,5 +100,10 @@ def getRunningLoop():
         raise RuntimeError('no running event loop')
 
 
+def printprocess(*args, **kwargs):
+    thread = getRunningThread()
+    print(f'|{thread.name}|> ', *args, **kwargs)
+
+
 get_running_thread = getRunningThread
 get_running_loop = getRunningLoop
