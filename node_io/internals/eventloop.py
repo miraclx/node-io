@@ -75,6 +75,10 @@ class EventLoop(EventEmitter):
                                % 'autostart=False')
         self._thread.start()
 
+    @debugwrapper
+    def stop(self):
+        self._queue.forceStop()
+
     @property
     def started(self):
         return self._thread._started.is_set()
